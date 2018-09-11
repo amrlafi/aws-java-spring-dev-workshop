@@ -1,0 +1,25 @@
+{
+  "Comment" : "Machine learning execution with spot instance",
+  "StartAt" : "RetrieveInfoFromPhotoUsingRekognition",
+  "States"  : {
+    "RetrieveInfoFromPhotoUsingRekognition": {
+      "Type"      : "Task",
+      "Resource"  : "arn:aws:lambda:us-east-1:550622896891:function:MyFunction-workshop-rekognition",
+      "Retry" : [ {"ErrorEquals":["HandledError"], "MaxAttempts":3} ],
+      "Next"      : "TransInfoUsingTranlate"
+    }, 
+    "TransInfoUsingTranlate": {
+      "Type"      : "Task",
+      "Resource"  : "arn:aws:lambda:us-east-1:550622896891:function:MyFunction-workshop-translate",
+      "Next"      : "StoreTransDataIntoDynamoDB"
+    },
+    "StoreTransDataIntoDynamoDB": {
+      "Type"      : "Task",
+      "Resource"  : "arn:aws:lambda:us-east-1:550622896891:function:MyFunction-workshop-dynamodb",    
+      "Retry" : [ {"ErrorEquals":["HandledError"], "MaxAttempts":3} ],
+      "End": true
+  		}
+  	}
+}
+
+

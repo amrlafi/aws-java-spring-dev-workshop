@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: RESTful API backed by AI and DynamoDB
+
+Globals:
+
+  Function:
+    Runtime: java8
+
+  Api:
+    # enable CORS; to make more specific, change the origin wildcard
+    # to a particular domain name, e.g. "'www.example.com'"
+    Cors:
+      AllowMethods: "'*'"
+      AllowHeaders: "'*'"
+      AllowOrigin: "'*'"
+
+ 
+Resources:
+   
+  TranslateFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.amazonaws.lambda.Translate::handleRequest
+      Runtime: java8
+      FunctionName: workshop-hello
+      Policies: TranslateReadOnly
+      MemorySize : 1024
+      Timeout : 30   
+      Events:
+        PostResource:
+          Type: Api
+          Properties:
+            Path: /hello/do
+            Method: post      
+      Environment:
+        Variables: 
+          S3_BUCKET: s3://seon-virginia-01
+      Tags:
+        ContactTag: workshop-translte            
+          

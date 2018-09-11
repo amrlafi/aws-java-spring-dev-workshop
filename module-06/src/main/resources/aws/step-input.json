@@ -1,0 +1,8 @@
+{
+    "bucket":"seon-virginia-2016", 
+    "prefix":"images/a.jpeg",
+    "text" : "Hello, hello",
+    "translated" : "",
+    "sourceLangCode" :"en",
+    "targetLangCode" : "es"
+}

@@ -1,0 +1,18 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  ServelessFunction:
+    Properties:
+      CodeUri: s3://seon-virginia-01/module-07-lamdba-translate-1.0.0.jar
+      Environment:
+        Variables:
+          S3_BUCKET: s3://seon-virginia-01
+      FunctionName: workshop-translate
+      Handler: com.amazonaws.lambda.LambdaTranslateHandler::handleRequest
+      MemorySize: 1024
+      Role: arn:aws:iam::550622896891:role/Alexa-DevOps-Role
+      Runtime: java8
+      Tags:
+        ContactTag: Me
+      Timeout: 30
+    Type: AWS::Serverless::Function
+Transform: AWS::Serverless-2016-10-31

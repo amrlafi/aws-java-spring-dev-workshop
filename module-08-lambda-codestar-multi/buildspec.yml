@@ -1,0 +1,36 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      # Upgrade AWS CLI to the latest version
+      - pip install --upgrade awscli
+  pre_build:
+    commands:
+      - echo Test started on `date`
+  build:
+    commands:
+      # translate
+      - echo Build translate started on `date`
+      - cd lambda-codestar-translate
+      - mvn clean compile test
+      - mvn package shade:shade
+      - mv target/lambda-codestar-translate-1.0.jar .
+      - unzip lambda-codestar-translate-1.0.jar
+      - rm -rf target tst src pom.xml lambda-codestar-translate-1.0.jar
+      - aws cloudformation package --template template.yml --s3-bucket $S3_BUCKET --output-template template-translate.yml
+      - cp template-translate.yml ..
+      # rekognition
+      - echo Build rekognition started on `date`
+      - cd  ../lambda-codestar-rekognition
+      - mvn clean compile test      
+      - mvn package shade:shade
+      - mv target/lambda-codestar-rekognition-1.0.jar .
+      - unzip lambda-codestar-rekognition-1.0.jar
+      - rm -rf target tst src pom.xml lambda-codestar-rekognition-1.0.jar
+      - aws cloudformation package --template template.yml --s3-bucket $S3_BUCKET --output-template template-rekognition.yml
+      - cp template-rekognition.yml ..
+artifacts:
+  files:
+    - 'template-translate.yml'
+    - 'template-rekognition.yml'

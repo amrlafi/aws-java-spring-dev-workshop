@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: RESTful API backed by AI and DynamoDB
+Globals:
+  Api:
+    Cors:
+      AllowHeaders: '''*'''
+      AllowMethods: '''*'''
+      AllowOrigin: '''*'''
+  Function:
+    Runtime: java8
+Resources:
+  TranslateFunction:
+    Properties:
+      CodeUri: s3://seon-virginia-01/193fdf238e2b90856c1c660853190c84
+      Environment:
+        Variables:
+          S3_BUCKET: s3://seon-virginia-01
+      Events:
+        PostResource:
+          Properties:
+            Method: post
+            Path: /hello/do
+          Type: Api
+      FunctionName: workshop-hello
+      Handler: com.amazonaws.lambda.Translate::handleRequest
+      MemorySize: 1024
+      Policies: TranslateReadOnly
+      Runtime: java8
+      Tags:
+        ContactTag: workshop-translte
+      Timeout: 30
+    Type: AWS::Serverless::Function
+Transform: AWS::Serverless-2016-10-31

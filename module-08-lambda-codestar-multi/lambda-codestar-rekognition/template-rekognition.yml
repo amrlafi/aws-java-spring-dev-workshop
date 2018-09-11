@@ -1,0 +1,24 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  ProjectId:
+    Description: AWS CodeStar projectID used to associate new resources to team members
+    Type: String
+Resources:
+  ServelessFunction:
+    Properties:
+      CodeUri: s3://seon-virginia-01/6d1896525b3c08a2edd29e34902a0244
+      Environment:
+        Variables:
+          S3_BUCKET: s3://seon-virginia-01
+      FunctionName: workshop-rekognition-codestar-test
+      Handler: com.amazonaws.lambda.LambdaRekognitionHandler::handleRequest
+      MemorySize: 1024
+      Role: arn:aws:iam::550622896891:role/Alexa-DevOps-Role
+      Runtime: java8
+      Tags:
+        ContactTag: workshop-rekognition
+      Timeout: 30
+    Type: AWS::Serverless::Function
+Transform:
+- AWS::Serverless-2016-10-31
+- AWS::CodeStar
